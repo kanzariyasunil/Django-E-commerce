@@ -1,44 +1,93 @@
 {% extends 'basic.html' %}
 {% block title%} MyAwesomeCart - Best Ecommerce Website{% endblock %}
 {% block css %}
-.col-md-3
-{
-display: inline-block;
-margin-left:-4px;
+<style>
+/* Existing styles */
+.col-md-3 {
+    display: inline-block;
+    margin-left: -4px;
 }
 .carousel-indicators .active {
-background-color: blue;
+    background-color: blue;
 }
-.col-md-3 img{
-width: 170px;
-height: 200px;
+.col-md-3 img {
+    width: 170px;
+    height: 200px;
 }
-body .carousel-indicator li{
-background-color: blue;
+body .carousel-indicator li {
+    background-color: blue;
 }
-body .carousel-indicators{
-bottom: -40px;
+body .carousel-indicators {
+    bottom: -40px;
 }
 .carousel-indicators li {
-
-
     background-color: #7270fc;
 }
 body .carousel-control-prev-icon,
-body .carousel-control-next-icon{
-background-color: blue;
+body .carousel-control-next-icon {
+    background-color: blue;
 }
 .carousel-control-prev,
-.carousel-control-next{
-top: auto;
-bottom: auto;
-padding-top: 222px;
+.carousel-control-next {
+    top: auto;
+    bottom: auto;
+    padding-top: 222px;
 }
-body .no-padding{
-padding-left: 0,
-padding-right: 0;
+body .no-padding {
+    padding-left: 0;
+    padding-right: 0;
 }
+
+    /* Default popover styling */
+    .popover {
+        max-width: 300px;
+        width: auto;
+    }
+
+    /* Adjust popover for smaller screens */
+    @media (max-width: 576px) {
+        .popover {
+            max-width: 90%; /* Use a percentage for better scaling */
+            word-wrap: break-word;
+        }
+    }
+
+
+/* Media Queries for Responsiveness */
+
+/* For devices with max-width of 768px (tablets and below) */
+@media (max-width: 768px) {
+    .col-md-3 img {
+        width: 100%;
+        height: auto;
+    }
+    .carousel-control-prev,
+    .carousel-control-next {
+        padding-top: 50px;
+    }
+    .carousel-indicators {
+        bottom: -20px;
+    }
+}
+
+/* For devices with max-width of 576px (mobile phones) */
+@media (max-width: 576px) {
+    .col-md-3 {
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .carousel-indicators {
+        display: none; /* Hide indicators on very small screens for simplicity */
+    }
+    .carousel-control-prev,
+    .carousel-control-next {
+        padding-top: 30px;
+    }
+}
+</style>
 {% endblock %}
+
 {% block body %}
 {% load static %}
 <div class="container">
@@ -57,16 +106,16 @@ padding-right: 0;
                 <div class="carousel-item active">
                     {% for i in product %}
                     <div class="col-xs-3 col-sm-3 col-md-3">
-                        <div class="card align-items-center" style="width: 18rem;">
+                        <div class="card align-items-center">
                             <img src='/media/{{i.image}}' class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title" id="namepr{{i.id}}">{{i.product_name}}</h5>
                                 <p class="card-text">{{i.desc|slice:"0:53"}}...</p>
                                 <h6 class="card-title" >Price: <span id="pricepr{{i.id}}">{{i.price}}</span></h6>
                                 <span id="divpr{{i.id}}" class="divpr">
-                                    <button id="pr{{i.id}}" class="btn btn-primary cart">Add To Cart</button>
+                                    <button id="pr{{i.id}}" class="btn btn-sm btn-primary cart">Add To Cart</button>
                                 </span>
-                                <a href="/shop/products/{{i.id}}"><button id="qv{{i.id}}" class="btn btn-primary cart">QuickView</button></a>
+                                <a href="/shop/products/{{i.id}}"><button id="qv{{i.id}}" class="btn btn-sm btn-primary cart">QuickView</button></a>
                             </div>
                         </div>
                     </div>
@@ -116,20 +165,22 @@ if (localStorage.getItem('cart') == null) {
 $('#popcart').popover();
 updatePopover(cart);
 function updatePopover(cart) {
-    console.log('We are inside updatePopover');
-    var popStr = "";
-    popStr = popStr + "<h5> Cart for your items in my shopping cart </h5><div class='mx-2 my-2'>";
+    var popStr = "<h5 class='text-center'>Cart for your items</h5>";
+    popStr += "<div class='mx-2 my-2'>";
     var i = 1;
     for (var item in cart) {
-        popStr = popStr + "<b>" + i + "</b>. ";
-        popStr = popStr + document.getElementById('name' + item).innerHTML.slice(0, 19) + "... Qty: " + cart[item][0] + '<br>';
-        i = i + 1;
+        popStr += `<p class="small"><b>${i}</b>. ${document.getElementById('name' + item).innerHTML.slice(0, 19)}... Qty: ${cart[item][0]}</p>`;
+        i++;
     }
-    popStr = popStr + "</div> <a href='/shop/checkout'><button class='btn btn-primary' id ='checkout'>Checkout</button></a> <button class='btn btn-primary' onclick='clearCart()' id ='clearCart'>Clear Cart</button>     "
-    console.log(popStr);
-    document.getElementById('popcart').setAttribute('data-content', popStr);
-    $('#popcart').popover('show');
+    popStr += "</div>";
+    popStr += "<div class='d-flex justify-content-between'>";
+    popStr += "<a href='/shop/checkout'><button class='btn btn-sm btn-primary'>Checkout</button></a>";
+    popStr += "<button class='btn btn-sm btn-danger' onclick='clearCart()'>Clear Cart</button>";
+    popStr += "</div>";
+
+    $('#popcart').attr('data-content', popStr).popover('show');
 }
+
 function clearCart() {
     cart = JSON.parse(localStorage.getItem('cart'));
     for (var item in cart) {
