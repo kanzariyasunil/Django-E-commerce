@@ -4,14 +4,80 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
     <title>{% block title%} {% endblock %}</title>
+    {% block css%}
      <style>
-       {% block css %} {% endblock %}
-  </style>
+       /* Media Queries for Navbar and Cart Button */
+
+/* For devices with max-width of 768px (tablets and below) */
+/* For devices with max-width of 768px (tablets and below) */
+@media (max-width: 768px) {
+  /* Navbar adjustments */
+  .navbar-nav {
+      flex-direction: column; /* Stack navigation items vertically */
+      text-align: center; /* Center-align navigation links */
+  }
+  .form-inline {
+      flex-direction: column; /* Stack search bar and button vertically */
+      align-items: center;
+      margin-bottom: 10px;
+  }
+  .form-inline input,
+  .form-inline button {
+      width: 90%; /* Stretch inputs/buttons to fit the screen */
+      margin-bottom: 8px;
+  }
+
+  /* Cart button adjustments */
+  #popcart {
+      position: static;
+      display: block; /* Center the cart button */
+      width: 90%; /* Adapt to smaller screens */
+      margin: 10px auto;
+      font-size: 0.9rem; /* Reduce font size slightly */
+      text-align: center;
+  }
+
+  /* Ensure navbar toggler works smoothly */
+  .navbar-toggler {
+      margin-bottom: 10px; /* Add spacing below the toggler */
+  }
+}
+
+/* For devices with max-width of 576px (mobile phones) */
+@media (max-width: 576px) {
+  /* Navbar layout adjustments */
+  .navbar-nav {
+      margin-top: 10px;
+  }
+
+  /* Search form adjustments */
+  .form-inline input,
+  .form-inline button {
+      width: 100%; /* Make inputs/buttons take the full width */
+      margin-bottom: 10px;
+  }
+
+  /* Cart button adjustments */
+  #popcart {
+      margin: 5px auto;
+      font-size: 0.8rem; /* Further reduce font size */
+      padding: 6px 12px; /* Adjust padding */
+  }
+
+  /* Reduce navbar brand size for better spacing */
+  .navbar-brand {
+      font-size: 1.2rem;
+  }
+}
+
+
+</style>
+{% endblock %}
   </head>
   <body>
 
